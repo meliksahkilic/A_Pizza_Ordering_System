@@ -1,0 +1,126 @@
+# Pizza Ordering System
+
+# Gerekli kitaplıkları import ediyoruz:
+import csv
+import datetime
+
+# “Menu.txt” dosyasını oluşturduk
+with open("Menu.txt", "w") as f:
+    f.write("* Lütfen Bir Pizza Tabanı Seçiniz:\n")
+    f.write("1: Klasik\n")
+    f.write("2: Margarita\n")
+    f.write("3: TürkPizza\n")
+    f.write("4: Sade Pizza\n")
+    f.write("* ve seçeceğiniz sos:\n")
+    f.write("11: Zeytin\n")
+    f.write("12: Mantarlar\n")
+    f.write("13: Keçi Peyniri\n")
+    f.write("14: Et\n")
+    f.write("15: Soğan\n")
+    f.write("16: Mısır\n")
+    f.write("*Teşekkür ederiz!")
+    
+
+
+def add_methods(cls):
+    """A class decorator that adds two methods to a class."""
+    def get_cost(self):
+        return self.cost
+
+    def get_description(self):
+        return self.description
+
+    # Add the methods to the class
+    cls.get_cost = get_cost
+    cls.get_description = get_description
+
+    # Return the modified class
+    return cls
+
+@add_methods
+class Pizza:
+    def __init__(self, description, cost):
+        self.description = description
+        self.cost = cost
+
+# Create an instance of the class and call the new methods
+KlasikPizza = Pizza('Karışık Pizza', 25)
+Margarita = Pizza('Only Mozerella', 15)
+TürkPizza = Pizza('Lahmacun', 20)
+DominosPizza = Pizza('Bol Malzemos', 30)
+print(KlasikPizza.get_description())  # Output: Karışık Pizza
+print(KlasikPizza.get_cost())  # Output: 25
+
+
+@add_methods
+class Sos:
+  def __init__(self, description, cost):
+    self.description = description
+    self.cost = cost
+    Zeytin = Sos('Balıkesir Zeytini', 2.0)
+    Mantar = Sos('Kültür Mantarı', 1.5)
+    Keçi_Peyniri = Sos('Erzincan Keçi Peyniri', 2.0)
+    Et = Sos('Kuzu Eti', 2.5)
+    Soğan = Sos('Anadolu Soğanı', 1.0)
+    Mısır = Sos('Süt Mısırı', 1.0)
+
+import csv
+import datetime
+from datetime import datetime
+
+# Menu.txt dosyasından menü öğelerini oku
+with open("Menu.txt", "r") as f:
+    menu_items = f.readlines()
+
+# Menü öğelerini ekrana yazdır
+print("Hoşgeldiniz! Lütfen bir pizza ve sos seçin.")
+for item in menu_items:
+    print(item.strip())
+
+# Kullanıcıdan pizza ve sos seçimlerini al
+pizza_choice = input("Pizza seçimi (1-4): ")
+while pizza_choice not in ['1', '2', '3', '4']:
+    pizza_choice = input("Lütfen geçerli bir pizza seçimi yapın (1-4): ")
+
+sos_choice = input("Sos seçimi (11-16): ")
+while sos_choice not in ['11', '12', '13', '14', '15', '16']:
+    sos_choice = input("Lütfen geçerli bir sos seçimi yapın (11-16): ")
+
+# Seçimlere göre fiyat hesapla
+pizza_prices = {'1': 20, '2': 25, '3': 30, '4': 15}
+sos_prices = {'11': 2.0, '12': 1.5, '13': 2.0, '14': 2.5, '15': 1.0, '16': 1.0}
+total_price = pizza_prices[pizza_choice] + sos_prices[sos_choice]
+
+# Kullanıcı bilgilerini al 
+name = input("İsim: ")
+tc_no = input("TC Kimlik Numarası: ")
+credit_card_no = input("Kredi Kartı Numarası: ")
+credit_card_pin = input("Kredi Kartı Şifresi: ")
+
+# Sipariş bilgilerini Orders_Database.csv dosyasına yaz
+
+now = datetime.now()
+    
+current_time = now.strftime("%d/%m/%Y %H:%M:%S")
+
+# Define variable titles
+fieldnames = ['Name', 'ID Number', 'Credit Card Number', 'Pizza Choice', 'Sos Choice', 'Total Price', 'Order Time', 'Credit Card Password']
+
+# Write order details to CSV file
+with open('Order_Database.csv', mode='a', newline='') as file:
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    if file.tell() == 0:
+        writer.writeheader() # Write fieldnames as the first row if the file is empty
+    writer.writerow({'Name': name, 'ID Number': tc_no, 'Credit Card Number': credit_card_no, 
+                      'Pizza Choice': pizza_choice, 'Sos Choice': sos_choice, 'Total Price': total_price,
+                      'Order Time': current_time, 'Credit Card Password': credit_card_pin})
+
+# Sipariş özetini ekrana yazdır
+print("Sipariş özeti:")
+print(f"Pizza: {menu_items[int(pizza_choice)]}")
+print(f"Sos: {menu_items[int(sos_choice)]}")
+print(f"Toplam Fiyat: {total_price} TL")
+print(f"İsim: {name}")
+print(f"TC Kimlik Numarası: {tc_no}")
+print(f"Kredi Kartı Numarası: {credit_card_no}")
+print("Sipariş alındı. Teşekkür ederiz!")
